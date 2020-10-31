@@ -1,9 +1,10 @@
 package classes;
 
 public class Student {
-    int ID;
+    int idNumber;
     float GPA;
     Student(int ID , float GPA){
-
+        this.idNumber=ID;
+        this.GPA = GPA;
     }
 }
