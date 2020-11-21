@@ -3,17 +3,13 @@ package classes;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class Sort implements Comparator<Student> {
-    @Override
-    public int compare(Student o1, Student o2) {
-        return Float.compare(o1.GPA, o2.GPA);
-    }
+public class Sort {
 
-    public static void sort(ArrayList<Student> arr) {
+    public static void sort(ArrayList<Student> arr , Comparator obj) {
         int len = arr.size();
         for (int i = 0; i < len; i++) {
             for (int j = 0; j < len; j++) {
-                if (arr.get(i).idNumber < arr.get(j).idNumber) {
+                if (obj.compare(arr.get(i) , arr.get(j))==-1) {
                     Student temp = arr.get(i);
                     arr.set(i, arr.get(j));
                     arr.set(j, temp);
@@ -22,7 +18,7 @@ public class Sort implements Comparator<Student> {
         }
     }
 
-    public Student[] mergeSort(Student[] students , int reverse) {
+    public static Student[] mergeSort(Student[] students , int reverse , Comparator obj) {
 
         if (students == null) {
             return null;
@@ -38,14 +34,14 @@ public class Sort implements Comparator<Student> {
         Student[] temp2 = new Student[students.length - students.length / 2];
         System.arraycopy(students, students.length / 2, temp2, 0, students.length - students.length / 2);
 
-        temp1 = mergeSort(temp1,reverse);
-        temp2 = mergeSort(temp2,reverse);
+        temp1 = mergeSort(temp1,reverse , obj);
+        temp2 = mergeSort(temp2,reverse , obj);
 
 
-        return mergeArray(temp1, temp2,reverse);
+        return mergeArray(temp1, temp2,reverse , obj);
     }
 
-    public Student[] mergeArray(Student[] temp1, Student[] temp2,int reverse) {
+    public static Student[] mergeArray(Student[] temp1, Student[] temp2,int reverse , Comparator obj) {
 
         Student[] arrayResult = new Student[temp1.length + temp2.length];
         int position1 = 0, position2 = 0;
@@ -57,7 +53,7 @@ public class Sort implements Comparator<Student> {
             } else if (temp2.length == position2) {
                 arrayResult[i] = temp1[position1];
                 position1++;
-            } else if (compare(temp1[position1], temp2[position2]) == reverse) {
+            } else if (obj.compare(temp1[position1], temp2[position2]) == reverse) {
                 arrayResult[i] = temp2[position2];
                 position2++;
             } else {
@@ -69,17 +65,17 @@ public class Sort implements Comparator<Student> {
     }
 
 
-    public void quickSort(Student[] array, int lowPos, int highPos) {
-        if (array.length == 0) return;
-        if (lowPos >= highPos) return;
+    public static Student[] quickSort(Student[] array, int lowPos, int highPos , Comparator obj) {
+        if (array.length == 0) return array;
+        if (lowPos >= highPos) return array;
         int middle = lowPos + (highPos - lowPos);
         Student opora = array[middle];
         int i = lowPos, j = highPos;
         while (i <= j) {
-            while (compare(array[i],opora) == 1) {
+            while (obj.compare(array[i],opora) == 1) {
                 i++;
             }
-            while (compare(array[j],opora) == -1) {
+            while (obj.compare(array[j],opora) == -1) {
                 j--;
             }
             if (j >= i) {
@@ -91,9 +87,10 @@ public class Sort implements Comparator<Student> {
             }
         }
         if (lowPos < j)
-            quickSort(array, lowPos, j);
+            quickSort(array, lowPos, j , obj);
         if (highPos > i)
-            quickSort(array, i, highPos);
+            quickSort(array, i, highPos , obj);
+        return array;
     }
 }
 
